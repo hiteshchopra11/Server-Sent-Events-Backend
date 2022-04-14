@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/status', (request, response) => response.json({ clients: clients.length }));
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 let clients = [];
 let livestreamEvents = [];
