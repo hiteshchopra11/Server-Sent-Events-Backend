@@ -13,10 +13,10 @@ app.get('/status', (request, response) => response.json({ clients: clients.lengt
 const PORT = process.env.PORT || 3000;
 
 let clients = [];
-let livestreamEvents = [];
+let events = [];
 
 app.listen(PORT, () => {
-    console.log(`Livestream service starting`)
+    console.log(`Events service starting`)
 })
 
 function eventsHandler(request, response, next) {
@@ -27,7 +27,7 @@ function eventsHandler(request, response, next) {
     };
     response.writeHead(200, headers);
   
-    const data = `data: ${JSON.stringify(livestreamEvents)}\n\n`;
+    const data = `data: ${JSON.stringify(events)}\n\n`;
   
     response.write(data);
   
@@ -48,15 +48,16 @@ function eventsHandler(request, response, next) {
   
 app.get('/events', eventsHandler);
 
-function sendEventsToAll(livestreamEvent) {
-    clients.forEach(client => client.response.write(`data: ${JSON.stringify(livestreamEvent)}\n\n`))
+function sendEventsToAll(newEvent) {
+    clients.forEach(client => client.response.write(`data: ${JSON.stringify(newEvent)}\n\n`))
 }
 
-async function addLivestreamEvent(request, respsonse, next) {
-    const livestreamEvent = request.body;
-    livestreamEvents.push(livestreamEvent);
-    respsonse.json(livestreamEvent)
-    return sendEventsToAll(livestreamEvent);
+async function addnewEvent(request, respsonse, next) {
+    req.setTimeout(500000);
+    const newEvent = request.body;
+    events.push(newEvent);
+    respsonse.json(newEvent)
+    return sendEventsToAll(newEvent);
 }
 
-app.post('/event', addLivestreamEvent);
+app.post('/event', addnewEvent);
